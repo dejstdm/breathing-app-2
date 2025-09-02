@@ -1,7 +1,7 @@
 # AGENTS.md - AI Development Rules
 
 ## Project Overview
-This is a Breathing Web App PWA built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui. The app provides guided breathing exercises with precise timing, smooth animations, and complete offline functionality.
+This is a Breathing Web App PWA built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui. The app provides guided breathing exercises with precise timing and smooth animations, and it must be installable with complete offline functionality and a branded splash screen.
 
 ## Core Development Principles
 
@@ -64,6 +64,7 @@ interface BreathingAnimationProps {
 - **Versioning**: Include version fields in JSON files for future migrations
 
 ### 6. PWA Implementation Requirements
+- **Mandatory for MVP**: Installable app, complete offline functionality after first visit, and branded splash screen.
 - **Complete Offline**: All functionality must work offline after first visit
 - **Service Worker**: Cache all assets, JSON files, and app shell
 - **App Manifest**: Proper icons, theme colors, standalone display
@@ -98,12 +99,20 @@ interface BreathingAnimationProps {
 - **Dark Mode**: System preference detection with manual toggle
 - **Component Variants**: Use cva (class-variance-authority) for component variants
 
+### 10.1 Design System & Theming
+- **Theme Files**: Place TweakCN-exported CSS variables in `public/themes/<theme>.css` under `:root` and optional `.dark`.
+- **Theme Manifest (SSOT)**: Maintain `public/themes/manifest.json` as the single source of truth for theme list, default, and labels (no color data; colors come from the CSS files).
+- **Theme Loader**: `ThemeProvider` injects `<link id="app-theme">` for the active theme and updates it at runtime.
+- **Color Scheme**: Light/Dark/System toggle applies `html.dark` and `data-color-scheme` for targeting; follows OS on System.
+- **BEM Classes**: Use BEM-style classes for identification only (e.g., `app-shell__header`, `breath__start`). Styling remains Tailwind-first.
+
 ### 11. State Management
 - **React State**: Use useState, useReducer for component state
 - **Custom Hooks**: Extract complex state logic into reusable hooks
 - **Local Storage**: Wrap in custom hooks with error handling
 - **No Global State**: Avoid Redux, Zustand until actually needed
 - **Effect Management**: Proper cleanup in useEffect hooks
+- **Theme State**: Persist `app.theme` (theme CSS file) and `app.scheme` (light/dark/system) in localStorage.
 
 ### 12. Error Handling
 - **Error Boundaries**: Catch React errors gracefully
@@ -125,6 +134,7 @@ interface BreathingAnimationProps {
 - **Mock Data**: Use realistic mock data during development
 - **Hot Reload**: Ensure changes reflect immediately in development
 - **TypeScript Checking**: Fix all TypeScript errors before proceeding
+- **Incremental UI Preview**: Prefer small changes visible in the browser after each step to enable rapid visual feedback.
 
 ### 15. Documentation Requirements
 - **Component Documentation**: JSDoc comments for all public interfaces
@@ -181,3 +191,16 @@ interface BreathingTechnique {
 4. Suggest improvements while maintaining scope
 5. Flag potential issues early in development
 6. Ensure all code is production-ready and tested
+
+## Current Routing Decisions (as implemented)
+- **Breathing Screen**: Dedicated route at `/breath` for a focused, full-screen animation (header hidden; start/stop overlay controls).
+- **Navigation**: Modal drawer with links to Home (`/`), Breathing (`/breath`), Settings (`/settings`), About (`/about`).
+- **Settings**: Includes Theme selector and Appearance (Light/Dark/System) toggle.
+
+## Implemented UI Building Blocks
+- `src/components/layout/AppShell.tsx` — app bar + drawer (BEM: `app-shell`)
+- `src/components/layout/ThemeProvider.tsx` — runtime theme and color-scheme loader
+- `src/app/breath/page.tsx` — dedicated breathing screen (BEM: `breath`)
+- `src/app/settings/ThemeSelector.tsx` — theme cards with previews (BEM: `theme-selector`)
+- `src/app/settings/ColorSchemeToggle.tsx` — light/dark/system segmented control (BEM: `color-scheme-toggle`)
+- Theme CSS files in `public/themes/`

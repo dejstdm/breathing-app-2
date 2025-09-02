@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "default": "amethyst-haze",
+  "themes": [
+    { "name": "amethyst-haze", "label": "Amethyst Haze" },
+    { "name": "amber-minimal", "label": "Amber Minimal" },
+    { "name": "bubblegum", "label": "Bubblegum" },
+    { "name": "mono", "label": "Mono" },
+    { "name": "doom-64", "label": "Doom 64" }
+  ]
+}
+

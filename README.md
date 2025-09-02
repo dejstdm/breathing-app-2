@@ -1,25 +1,23 @@
 # Breathing Web App
 
-A lightweight, precision-timed Progressive Web App (PWA) for guided breathing exercises. Built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui components.
+A lightweight, precision-timed breathing app built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui. This repo follows an incremental, UI‑first workflow with visible changes in the browser at each step.
 
-## Features
+## Current Features
 
-- 🫁 **Precision Breathing Techniques**: 4-7-8, 5-5-5, Box Breathing (4-4-4) with ±50ms timing accuracy
-- ✨ **Smooth HTML/CSS Animations**: Optimized breathing orb with 60fps performance
-- 📱 **Progressive Web App**: Install on any device, works completely offline
-- 🎨 **Clean, Accessible Design**: WCAG 2.1 AA compliant with dark/light themes
-- 🔧 **Modular Architecture**: JSON-driven configuration, replaceable components
-- 🚀 **High Performance**: <2s load time, <120KB bundle size
-- 🔒 **Privacy-First**: No tracking, all data stored locally
+- 🧭 **Mobile App Shell**: Top bar with hamburger and a modal drawer (Home, Breathing, Settings, About)
+- 🫁 **Dedicated Breathing Screen**: `/breath` is a focused, full‑screen stage with Start/Stop overlay controls
+- 🎨 **Multiple Themes**: Theme CSS files in `public/themes/` loaded at runtime; selection persists
+- 🌗 **Appearance Toggle**: Light/Dark/System (follows OS when set to System)
+- 🧩 **BEM Class Names**: Present for identification/communication (styling remains Tailwind‑first)
+
+Planned (not yet implemented): techniques JSON and selector, precise animation timing, PWA (offline + install), tests.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router) + TypeScript
-- **Styling**: Tailwind CSS + shadcn/ui components
-- **Animations**: HTML/CSS transforms + Web Animations API
-- **PWA**: Service Worker + Web App Manifest
-- **Testing**: Jest + React Testing Library
-- **Analytics**: Privacy-friendly (optional)
+- **Framework**: Next.js 15 (App Router) + TypeScript (strict)
+- **Styling**: Tailwind CSS v4 + shadcn/ui components
+- **Theming**: TweakCN-exported CSS variable themes, loaded via a ThemeProvider
+- **Animations**: HTML/CSS transforms + Web Animations API (to be wired)
 
 ## Getting Started
 
@@ -33,7 +31,7 @@ A lightweight, precision-timed Progressive Web App (PWA) for guided breathing ex
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd breathing-web-app
+cd breathing-app-2
 
 # Install dependencies
 npm install
@@ -58,28 +56,10 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
-
-The app will auto-reload when you make changes to the code.
+Open http://localhost:3000 to see the app. It reloads on changes.
 
 ### Testing
-
-```bash
-# Run all tests
-npm run test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run accessibility tests
-npm run test:a11y
-
-# Run performance tests
-npm run test:perf
-```
+Test commands will be added as features land.
 
 ### Building for Production
 
@@ -98,93 +78,55 @@ npm run analyze
 
 ```
 src/
-├── app/                    # Next.js app router pages
+├── app/
+│   ├── layout.tsx          # Wraps pages with AppShell + ThemeProvider
+│   ├── page.tsx            # Home placeholder
+│   ├── breath/page.tsx     # Dedicated breathing screen
+│   └── settings/
+│       ├── page.tsx        # Settings page
+│       ├── ThemeSelector.tsx
+│       └── ColorSchemeToggle.tsx
 ├── components/
-│   ├── ui/                 # shadcn/ui components
-│   ├── breathing/          # Breathing-specific components
-│   │   ├── BreathingAnimation.tsx
-│   │   ├── TechniqueSelector.tsx
-│   │   └── SessionControls.tsx
-│   └── layout/             # Layout components
-├── data/
-│   ├── breathing-techniques.json
-│   ├── content.json
-│   └── app-config.json
-├── hooks/                  # Custom React hooks
-├── utils/                  # Utility functions
-├── types/                  # TypeScript definitions
-└── tests/                  # Test files
+│   └── layout/
+│       ├── AppShell.tsx    # Mobile header + drawer
+│       └── ThemeProvider.tsx# Theme and color scheme loader
+└── ... (data, hooks, utils, types)
 
 public/
-├── icons/                  # PWA icons
-├── manifest.json           # Web App Manifest
-└── sw.js                   # Service Worker
+└── themes/                 # Theme CSS files from TweakCN
+    ├── amethyst-haze.css
+    ├── amber-minimal.css
+    └── bubblegum.css
 ```
 
-## Configuration
+## Theming
+The app loads theme CSS files dynamically and persists your choice.
 
-### Adding New Breathing Techniques
+- Single source of truth: `public/themes/manifest.json` lists available themes and the default.
+- Add a new theme by placing a file at `public/themes/<name>.css` with variables under `:root` (and optional `.dark`) and adding an entry to `public/themes/manifest.json`.
+- Open `/settings` → Theme and select it; the selector reads labels from the manifest and parses colors from each theme’s CSS for previews (no color data is stored in the manifest).
+- Set Appearance to Light/Dark/System; System follows OS and toggles `html.dark` automatically.
 
-Edit `src/data/breathing-techniques.json`:
+Preview cards display a meaningful swatch per theme (overrides are allowed for better representation).
 
-```json
-{
-  "techniques": [
-    {
-      "id": "4-7-8",
-      "name": "4-7-8 Breathing",
-      "description": "Relaxing breath technique",
-      "explanation": "Promotes relaxation and better sleep by activating the parasympathetic nervous system.",
-      "when_to_use": "Before bed, during stress, or when feeling anxious",
-      "phases": {
-        "inhale": 4,
-        "hold": 7,
-        "exhale": 8
-      },
-      "recommended_cycles": 4,
-      "difficulty": "beginner"
-    }
-  ]
-}
-```
+## Routes
 
-### Environment Variables
+- `/` — Home (placeholder for onboarding/quick-pick)
+- `/breath` — Focused breathing screen (full screen, Start/Stop overlay controls)
+- `/settings` — Theme selector and Appearance toggle
+- `/about` — Placeholder
 
-Create a `.env.local` file:
+## Roadmap (next)
 
-```bash
-# Optional: Privacy-friendly analytics
-NEXT_PUBLIC_ANALYTICS_ENABLED=false
-NEXT_PUBLIC_ANALYTICS_URL=your-analytics-url
+- Techniques JSON + type definitions and Settings selector
+- BreathingAnimation component with precise WAAPI timing (±50ms) and reduced‑motion fallback
+- Page transitions (mobile-like) honoring reduced motion
+- PWA (manifest + service worker) and install prompt
+- Tests (unit + integration + a11y)
 
-# Optional: App configuration
-NEXT_PUBLIC_APP_VERSION=1.0.0
-```
+## Accessibility (in progress)
 
-## PWA Features
-
-- **Offline Support**: Complete functionality without internet after first visit
-- **Install Prompt**: Custom installation experience
-- **App Icons**: Optimized icons for all platforms
-- **Splash Screen**: Branded loading experience
-- **Background Sync**: Future feature preparation
-
-## Performance Targets
-
-- ✅ First Load: <2s on 4G
-- ✅ Lighthouse PWA Score: ≥90
-- ✅ Lighthouse Accessibility: ≥95
-- ✅ Core Web Vitals: LCP <2.5s, CLS <0.05, INP <200ms
-- ✅ Bundle Size: <120KB gzipped
-
-## Accessibility
-
-- Full keyboard navigation support
-- Screen reader compatible with ARIA labels
-- High contrast mode support
-- Respects `prefers-reduced-motion`
-- Color contrast ratios meet WCAG 2.1 AA standards
-- Text scaling up to 200% zoom
+- Keyboard navigation, ARIA labels, reduced motion compliance (ongoing)
 
 ## Browser Support
 
@@ -197,7 +139,7 @@ NEXT_PUBLIC_APP_VERSION=1.0.0
 
 ## Development Guidelines
 
-Please read [AGENTS.md](./AGENTS.md) for detailed development rules and architectural guidelines.
+Please read `AGENTS.md` and `PRD.md` for rules, scope, and roadmap.
 
 Key principles:
 - **Modular Design**: Components are isolated and replaceable

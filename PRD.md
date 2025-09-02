@@ -30,13 +30,14 @@ The Breathing Web App is a lightweight, installable Progressive Web App (PWA) th
 ## 5. Technical Architecture & Stack
 
 ### 5.1 Core Technology Stack
-- **Framework**: Next.js (App Router) + TypeScript
-- **Styling**: Tailwind CSS + shadcn/ui components
+- **Framework**: Next.js 15 (App Router) + TypeScript (strict)
+- **Styling**: Tailwind CSS v4 + shadcn/ui components
+- **Design Tokens**: TweakCN-exported CSS variables per theme
 - **Animation**: HTML/CSS + Web Animations API (modular component for easy replacement)
 - **State Management**: React state + localStorage for preferences
 - **Data**: JSON configuration files (breathing techniques, content)
-- **PWA**: Web App Manifest + Service Worker (complete offline functionality)
-- **Testing**: Comprehensive test suite for modular updates
+- **PWA**: Web App Manifest + Service Worker (planned for MVP; not yet implemented)
+- **Testing**: Unit/integration tests (to be added as features land)
 
 ### 5.2 Modular Architecture Requirements
 - **Breathing Animation Component**: Isolated, replaceable component with standardized props interface
@@ -44,6 +45,11 @@ The Breathing Web App is a lightweight, installable Progressive Web App (PWA) th
 - **Feature Flag System**: Easy enabling/disabling of features for testing
 - **Component Library**: Consistent, reusable UI components
 - **Analytics Module**: Privacy-friendly tracking (optional, toggleable)
+
+### 5.3 Theming Architecture (Implemented)
+- **Theme Files**: Each theme lives in `public/themes/<name>.css` with variables in `:root` (and optional `.dark`).
+- **Theme Loader**: A `ThemeProvider` injects `<link id="app-theme">` at runtime and persists `app.theme` in localStorage.
+- **Color Scheme**: Appearance toggle (Light/Dark/System) applies `html.dark` and `data-color-scheme`; persisted as `app.scheme`.
 
 ## 6. MVP Features
 
@@ -54,8 +60,9 @@ The Breathing Web App is a lightweight, installable Progressive Web App (PWA) th
   - 4-4-4 (Box Breathing): 4s each phase - for calm focus and stress relief
 - **Precision Animation**: HTML/CSS orb with scale transforms, synchronized to exact timing (±50ms tolerance)
 - **Theme System**: Light/dark mode with system preference detection
+- **Theme Switching**: Choose between multiple CSS-variable themes in Settings; previews show theme color swatches
 - **Accessibility**: Full keyboard support, screen reader compatible, reduced motion support
-- **PWA Functionality**: Installable, complete offline support, app icons
+- **PWA Functionality**: Installable, complete offline support, app icons (planned)
 - **Privacy-Friendly Analytics**: Optional usage tracking (cookieless, GDPR-compliant)
 
 ### 6.2 JSON Data Structure
@@ -105,11 +112,19 @@ The Breathing Web App is a lightweight, installable Progressive Web App (PWA) th
 
 4. **Use Offline**
    - *As a user, I can use the app completely offline after first visit*
-   - **AC**: All JSON data, assets cached, full functionality without internet
+   - **AC**: All JSON data, assets cached, full functionality without internet (planned)
 
 5. **Install as PWA**
    - *As a user, I can install the app on my device and use it like a native app*
-   - **AC**: Install prompt, standalone mode, proper app icons and splash screens
+   - **AC**: Install prompt, standalone mode, proper app icons and splash screens (planned)
+
+6. **Switch Theme and Appearance**
+   - *As a user, I can select among multiple visual themes and set light/dark/system*
+   - **AC**: Settings page shows theme cards with previews; selected theme applies instantly across the app and persists. Appearance toggle sets light/dark/system, follows OS on System.
+
+7. **Navigate via Drawer**
+   - *As a user, I can open a drawer and navigate between Home, Breathing, Settings, and About*
+   - **AC**: Drawer opens with smooth animation, traps focus, and closes on outside click or Esc. `/breath` hides the header for immersion.
 
 ## 8. Future Features (Post-MVP Roadmap)
 
@@ -195,6 +210,12 @@ The Breathing Web App is a lightweight, installable Progressive Web App (PWA) th
 - **Competition**: Mitigation - Unique value proposition (free, precise, privacy-focused)
 
 ## 13. Success Metrics
+
+## 14. Current Navigation & Routes (Implemented)
+- **`/breath`**: Focused breathing screen, full-screen stage, start/stop overlay buttons, header hidden.
+- **`/`**: Home placeholder; future onboarding/quick-pick space.
+- **`/settings`**: Theme selector and Appearance toggle (Light/Dark/System).
+- **`/about`**: Placeholder.
 
 ### 13.1 MVP Success Criteria
 - **Technical**: All Lighthouse scores ≥90, <2s load time, 100% offline functionality

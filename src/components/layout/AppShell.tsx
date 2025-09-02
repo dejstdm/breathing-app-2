@@ -1,0 +1,74 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
+
+type AppShellProps = {
+  children: React.ReactNode;
+};
+
+export default function AppShell({ children }: AppShellProps) {
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
+  const pathname = usePathname();
+
+  // Close drawer on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const isBreath = pathname === "/breath";
+
+  return (
+    <div className="app-shell min-h-dvh bg-background text-foreground">
+      <Sheet open={open} onOpenChange={setOpen}>
+        <header className={`app-shell__header fixed top-0 inset-x-0 h-14 flex items-center justify-between px-3 border-b border-border z-40 ${isBreath ? 'bg-black/20 backdrop-blur-sm' : 'bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60'}`}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`app-shell__menu-button ${isBreath ? 'text-white hover:bg-white/20' : ''}`}
+              aria-label="Open menu"
+            >
+              <Menu className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <div className={`app-shell__title text-base font-medium ${isBreath ? 'text-white' : ''}`}>Breathing</div>
+          <div className="app-shell__header-spacer w-10" aria-hidden />
+        </header>
+
+        <SheetContent side="left" className="app-shell__drawer w-[82%] max-w-[20rem] p-0">
+          <SheetTitle className="sr-only">Main Menu</SheetTitle>
+          <nav className="app-shell__nav pt-14 pb-6 flex flex-col">
+            <NavLink href="/" label="Home" onClick={close} active={pathname === "/"} />
+            <NavLink href="/breath" label="Breathing" onClick={close} active={pathname === "/breath"} />
+            <NavLink href="/settings" label="Settings" onClick={close} active={pathname?.startsWith("/settings") ?? false} />
+            <NavLink href="/about" label="About" onClick={close} active={pathname?.startsWith("/about") ?? false} />
+          </nav>
+        </SheetContent>
+      </Sheet>
+
+      <main className="app-shell__main pt-14">{children}</main>
+    </div>
+  );
+}
+
+function NavLink({ href, label, active, onClick }: { href: string; label: string; active?: boolean; onClick?: () => void }) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={`app-shell__nav-link px-4 py-3 text-base transition flex items-center gap-3 ${
+        active ? "app-shell__nav-link--active bg-accent font-medium text-accent-foreground" : "hover:bg-accent/50"
+      }`}
+    >
+      <span className="inline-block size-2 rounded-full bg-current opacity-50" />
+      <span>{label}</span>
+    </Link>
+  );
+}
