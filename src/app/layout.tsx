@@ -28,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Default theme link for no-flash SSR; updated on mount by ThemeProvider */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link id="app-theme" rel="stylesheet" href="/themes/amethyst-haze.css" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 
@@ -44,6 +44,7 @@ export default function AppShell({ children }: AppShellProps) {
 
         <SheetContent side="left" className="app-shell__drawer w-[82%] max-w-[20rem] p-0">
           <SheetTitle className="sr-only">Main Menu</SheetTitle>
+          <SheetDescription className="sr-only">Use the links to navigate between app sections.</SheetDescription>
           <nav className="app-shell__nav pt-14 pb-6 flex flex-col">
             <NavLink href="/" label="Home" onClick={close} active={pathname === "/"} />
             <NavLink href="/breath" label="Breathing" onClick={close} active={pathname === "/breath"} />

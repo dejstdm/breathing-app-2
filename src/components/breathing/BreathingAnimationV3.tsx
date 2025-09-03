@@ -87,27 +87,19 @@ export default function BreathingAnimationV3({
 
   const animate = (timestamp: number) => {
     if (isPausedRef.current) {
-      console.log('🟡 Animation paused');
       return;
     }
-    
     if (!phaseStartTimeRef.current) {
-      console.log('🟢 Starting new phase:', currentPhase);
       phaseStartTimeRef.current = timestamp;
     }
-    
     const elapsed = (timestamp - phaseStartTimeRef.current) / 1000;
     const activePhase = currentPhaseRef.current;
     const phaseDuration = phaseToDurationSeconds(pattern, activePhase);
     const progress = Math.min(elapsed / phaseDuration, 1);
-    
-    console.log(`📊 Phase: ${activePhase}, Duration: ${phaseDuration}s, Elapsed: ${elapsed.toFixed(1)}s, Progress: ${(progress * 100).toFixed(0)}%`);
-    
+
     // Update seconds counter (prevent negative values)
     const remainingSeconds = Math.max(0, Math.ceil(phaseDuration - elapsed));
     setCurrentSeconds(remainingSeconds);
-    
-    console.log(`⏰ Remaining: ${remainingSeconds}s (duration: ${phaseDuration}s, elapsed: ${elapsed.toFixed(1)}s)`);
 
     const blueCircle = blueCircleRef.current;
     const progressRing = progressRingRef.current;
@@ -166,24 +158,17 @@ export default function BreathingAnimationV3({
       const phaseOrder: BreathingPhaseV2[] = ['inhale', 'hold_in', 'exhale', 'hold_out'];
       const currentIndex = phaseOrder.indexOf(activePhase);
       const nextPhase = phaseOrder[(currentIndex + 1) % phaseOrder.length];
-      
-      console.log(`🔄 Phase complete! ${activePhase} -> ${nextPhase} (progress: ${(progress * 100).toFixed(1)}%)`);
-      console.log(`🔧 Before transition - phaseStartTime: ${phaseStartTimeRef.current}, timestamp: ${timestamp}`);
-      
+
       // Update both state and ref immediately
       currentPhaseRef.current = nextPhase;
       setCurrentPhase(nextPhase);
       phaseStartTimeRef.current = timestamp; // Set to current timestamp, not 0!
-      
-      console.log(`✅ Phase transition complete. New phase: ${nextPhase}`);
-      
+
       if (nextPhase === 'hold_in' || nextPhase === 'hold_out') {
         if (progressCircle) {
           progressCircle.style.strokeDashoffset = String(circumference);
         }
       }
-    } else {
-      console.log(`⏳ Phase in progress: ${(progress * 100).toFixed(1)}% complete`);
     }
 
     if (isRunningRef.current && !isPausedRef.current) {
@@ -192,7 +177,6 @@ export default function BreathingAnimationV3({
   };
 
   const startAnimation = () => {
-    console.log('🚀 Starting animation, isPaused:', isPaused);
     if (isPaused) {
       setIsPaused(false);
       isPausedRef.current = false;
@@ -241,10 +225,7 @@ export default function BreathingAnimationV3({
     }
   }, [circumference]);
 
-  // Debug currentPhase changes
-  useEffect(() => {
-    console.log('🎯 Current phase changed to:', currentPhase);
-  }, [currentPhase]);
+  // Update aria-live text via DOM when phase updates if needed in future
 
   return (
     <div className="breathing-v3 w-full mx-auto flex flex-col items-center gap-4 p-4">

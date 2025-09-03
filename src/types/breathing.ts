@@ -1,4 +1,5 @@
-export type BreathingPhase = 'inhale' | 'hold' | 'exhale';
+// Unified 4-phase breathing model (no legacy 'hold')
+export type BreathingPhase = 'inhale' | 'hold_in' | 'exhale' | 'hold_out';
 
 export interface BreathingTechnique {
   id: string;
@@ -9,9 +10,7 @@ export interface BreathingTechnique {
   phases: {
     inhale: number; // seconds
     exhale: number; // seconds
-    // Back-compat single hold (after inhale):
-    hold?: number; // seconds
-    // V2 explicit holds:
+    // Explicit holds:
     hold_in?: number; // seconds (after inhale)
     hold_out?: number; // seconds (after exhale)
   };
@@ -27,7 +26,8 @@ export interface BreathingAnimationProps {
 }
 
 // V2: Four-phase breathing pattern with two holds
-export type BreathingPhaseV2 = 'inhale' | 'hold_in' | 'exhale' | 'hold_out';
+// Backward naming alias (kept for compatibility across files)
+export type BreathingPhaseV2 = BreathingPhase;
 
 export interface BreathingPattern {
   inhale: number; // seconds
@@ -79,4 +79,50 @@ export type ProgramStep =
 export interface BreathingProgram extends BreathingProgramMeta {
   version: number;
   steps: ProgramStep[];
+}
+
+// New directory-based technique schema (per-file JSON in src/data/breathing-techniques)
+export type TechniqueMessageType = 'info' | 'warning' | 'success';
+
+export type TechniqueMessageTrigger =
+  | { type: 'repetition'; value: number }
+  | { type: 'time'; value: number };
+
+export interface TechniqueRound {
+  phases: BreathingPattern;
+  repetitions: number; // how many times to repeat this round's phases sequence
+  label?: string;
+  round_messages?: Array<{
+    type: TechniqueMessageType;
+    text: string;
+    trigger?: TechniqueMessageTrigger;
+  }>;
+}
+
+export interface TechniqueMessages {
+  pre_session?: Array<{ type: TechniqueMessageType; text: string }>;
+  on_start?: Array<{ type: TechniqueMessageType; text: string }>;
+  on_end?: Array<{ type: TechniqueMessageType; text: string }>;
+}
+
+export interface BreathingTechniqueV2 {
+  id: string;
+  name: string;
+  estimated_duration_minutes?: number;
+  description: string;
+  explanation: string;
+  when_to_use: string;
+  rounds: TechniqueRound[];
+  recommended_cycles: number;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  technique_messages?: TechniqueMessages;
+  cautions?: string[];
+}
+
+export interface BreathingTechniqueMeta {
+  id: string;
+  name: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  estimated_duration_minutes?: number;
 }

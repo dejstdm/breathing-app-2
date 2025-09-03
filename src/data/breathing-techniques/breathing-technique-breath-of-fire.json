@@ -1,0 +1,156 @@
+{
+    "id": "breath_of_fire",
+    "name": "Breath of Fire",
+    "estimated_duration_minutes": 8,
+    "description": "Rapid, rhythmic breathing with focus on forceful exhales and passive inhales.",
+    "explanation": "This pranayama technique increases oxygen levels, energizes the nervous system, and helps clear mental fog through rapid diaphragmatic breathing.",
+    "when_to_use": "Morning energy boost, mental clarity, warming the body, or before physical activity.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 0.5,
+                "hold_in": 0,
+                "exhale": 0.5,
+                "hold_out": 0
+            },
+            "repetitions": 30,
+            "label": "Breath of Fire - Round 1",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Focus on sharp, forceful exhales. Let the inhales happen naturally.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 10
+                    }
+                },
+                {
+                    "type": "warning",
+                    "text": "If you feel dizzy, slow down or take a break.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 25
+                    }
+                }
+            ]
+        },
+        {
+            "phases": {
+                "inhale": 4,
+                "hold_in": 8,
+                "exhale": 4,
+                "hold_out": 0
+            },
+            "repetitions": 3,
+            "label": "Recovery Breath",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Take slow, deep breaths to integrate the energy.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 1
+                    }
+                }
+            ]
+        },
+        {
+            "phases": {
+                "inhale": 0.5,
+                "hold_in": 0,
+                "exhale": 0.5,
+                "hold_out": 0
+            },
+            "repetitions": 60,
+            "label": "Breath of Fire - Round 2",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Double the repetitions. Maintain the rhythm but don't strain.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 20
+                    }
+                },
+                {
+                    "type": "warning",
+                    "text": "This is intense - listen to your body.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 50
+                    }
+                }
+            ]
+        },
+        {
+            "phases": {
+                "inhale": 6,
+                "hold_in": 12,
+                "exhale": 6,
+                "hold_out": 0
+            },
+            "repetitions": 3,
+            "label": "Final Integration",
+            "round_messages": [
+                {
+                    "type": "success",
+                    "text": "Well done! Allow the energy to settle through deep breathing.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "advanced",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "warning",
+                "text": "This is an intense technique - ensure you're in good health."
+            },
+            {
+                "type": "info",
+                "text": "Sit with spine straight, hands on knees."
+            },
+            {
+                "type": "info",
+                "text": "Focus will be on sharp exhales using your diaphragm."
+            },
+            {
+                "type": "warning",
+                "text": "Never practice if pregnant, with heart conditions, or high blood pressure."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "Begin with rapid, rhythmic breathing. Exhale sharp, inhale passive."
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "Excellent work! You should feel energized and mentally clear."
+            },
+            {
+                "type": "info",
+                "text": "Sit quietly for a few minutes to fully integrate the practice."
+            },
+            {
+                "type": "info",
+                "text": "This technique becomes easier and more beneficial with regular practice."
+            }
+        ]
+    },
+    "cautions": [
+        "NOT suitable for pregnant women or those with cardiovascular conditions.",
+        "Avoid if you have high or low blood pressure, epilepsy, or respiratory issues.",
+        "Stop immediately if you feel dizzy, nauseous, or unwell.",
+        "Start with shorter sessions and build up gradually.",
+        "Practice on empty stomach - wait 2-3 hours after eating.",
+        "This technique can be very stimulating - avoid before bedtime."
+    ]
+}

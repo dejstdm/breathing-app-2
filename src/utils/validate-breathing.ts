@@ -24,8 +24,7 @@ export function isBreathingTechnique(value: unknown): value is BreathingTechniqu
     // Required core timings
     isFinitePositive(phases["inhale"]) &&
     isFinitePositive(phases["exhale"]) &&
-    // Optional holds (v1 & v2)
-    (phases["hold"] === undefined || isFinitePositive(phases["hold"])) &&
+    // Optional holds (explicit only)
     (phases["hold_in"] === undefined || isFinitePositive(phases["hold_in"])) &&
     (phases["hold_out"] === undefined || isFinitePositive(phases["hold_out"])) &&
     // Other fields
@@ -43,11 +42,12 @@ export function parseBreathingTechniques(json: unknown): {
   if (!raw || typeof raw !== "object" || typeof raw.version !== "number") {
     throw new Error("Invalid breathing techniques file: missing version");
   }
-  if (!Array.isArray((raw as any).techniques)) {
+  const arr = (raw as RawTechniques).techniques;
+  if (!Array.isArray(arr)) {
     throw new Error("Invalid breathing techniques file: techniques must be an array");
   }
 
-  const techniques = (raw as any).techniques.filter(isBreathingTechnique) as BreathingTechnique[];
+  const techniques = (arr as unknown[]).filter(isBreathingTechnique) as BreathingTechnique[];
   if (techniques.length === 0) {
     throw new Error("No valid breathing techniques found");
   }

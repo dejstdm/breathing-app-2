@@ -2,8 +2,7 @@
 
 import ThemeSelector from "./ThemeSelector";
 import ColorSchemeToggle from "./ColorSchemeToggle";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import TechniqueSelector from "@/components/breathing/TechniqueSelector";
 
 export default function SettingsPage() {
   return (
@@ -17,11 +16,18 @@ export default function SettingsPage() {
         <ThemeSelector />
       </section>
 
-      <section className="settings__section settings__section--appearance mt-6 mb-20">
+      <section className="settings__section settings__section--appearance mt-6">
         <h2 className="settings__heading text-sm font-medium opacity-80">Appearance</h2>
         <p className="settings__hint text-xs opacity-60">Light, dark, or follow system.</p>
         <div className="mt-2" />
         <ColorSchemeToggle />
+      </section>
+
+      <section className="settings__section settings__section--techniques mt-6 mb-20">
+        <h2 className="settings__heading text-sm font-medium opacity-80">Breathing Techniques</h2>
+        <p className="settings__hint text-xs opacity-60">Pick a technique to start a session.</p>
+        <div className="mt-3" />
+        <TechniqueSelector />
       </section>
 
       {/* <section className="settings__section settings__section--test mt-6">
