@@ -1,0 +1,140 @@
+{
+
+      "id": "wim_hof",
+      "name": "Wim Hof Method",
+      "estimated_duration_minutes": 12,
+      "description": "Rapid breathing followed by breath retention for energy and focus.",
+      "explanation": "Combines hyperventilation with breath retention to influence the autonomic nervous system and increase cold tolerance.",
+      "when_to_use": "Morning energy boost, before cold exposure, or to build mental resilience.",
+      "rounds":[
+        {
+          "phases": {
+          "inhale": 4,
+          "hold_in": 0,
+          "exhale": 2,
+          "hold_out": 0
+          },
+          "repetitions": 30,
+          "label": "Breathing 1",
+          
+          "round_messages": [
+              {
+              
+              "type": "info",
+              "text": "Take deep, fast breaths. Inhale through the nose or mouth, exhale through the mouth.",
+              "trigger": { "type": "repetition", "value": 6 }
+            },
+            {
+              
+              "type": "warning",
+              "text": "If you feel lightheaded, stop and return to normal breathing.",
+              "trigger": { "type": "repetition", "value": 26 }
+            }
+          ]
+        },
+        {
+          "phases": {
+            "inhale": 8,
+            "hold_in": 15,
+            "exhale": 8,
+            "hold_out": 60
+          },
+          "repetitions": 1,
+          "label": "Retention 1",
+         
+          "round_messages": [
+            {
+              
+              "type": "warning",
+              "text": "If you feel lightheaded, stop and return to normal breathing.",
+              "trigger": { "type": "time", "value": 45 }
+            }
+          ]
+        },
+        {
+          "phases": {
+            "inhale": 4,
+            "hold_in": 0,
+            "exhale": 2,
+            "hold_out": 0
+          },
+          "repetitions": 30,
+          "label": "Breathing 2",
+         
+          "round_messages": []
+        },
+        {
+          "phases": {
+            "inhale": 8,
+            "hold_in": 15,
+            "exhale": 8,
+            "hold_out": 90
+          },
+          "repetitions": 1,
+          "label": "Retention 2",
+         
+          "round_messages": [
+            {
+             
+              "type": "warning",
+              "text": "If you feel lightheaded, stop and return to normal breathing.",
+              "trigger": { "type": "time", "value": 75 }
+            }
+          ]
+        },
+        {
+          "phases": {
+            "inhale": 4,
+            "hold_in": 0,
+            "exhale": 2,
+            "hold_out": 0
+          },
+          "repetitions": 30,
+          "label": "Breathing 3",
+         
+          "round_messages": []
+
+        },
+        {
+          "phases": {
+            "inhale": 8,
+            "hold_in": 15,
+            "exhale": 8,
+            "hold_out": 120
+          },
+          "repetitions": 1,
+          "label": "Retention 3",
+          
+          "round_messages": [
+            {
+             
+              "type": "success",
+              "text": "Well done! You are almost there.",
+              "trigger": { "type": "time", "value": 110 }
+            }
+           ]
+        }
+      ],
+      "recommended_cycles": 1,
+      "difficulty": "advanced",
+      
+      "technique_messages": {
+        "pre_session": [
+          {  "type": "info", "text": "Ensure you are seated or lying down in a safe environment." },
+          {  "type": "info", "text": "Perform the technique on an empty stomach for best results." },
+          {  "type": "warning", "text": "Avoid practicing in water or while driving." }
+        ],
+        "on_start": [
+          {  "type": "info", "text": "Begin 30 deep breaths at a steady pace." }
+        ],
+        "on_end": [
+          {  "type": "success", "text": "Session complete. Sit quietly and observe how you feel." },
+          {  "type": "info", "text": "If dizzy or uncomfortable, return to normal breathing and rest." }
+        ]
+      },
+      "cautions": [
+        "Not suitable for individuals with cardiovascular or respiratory conditions.",
+        "Avoid practicing while driving or in water.",
+        "Consult a healthcare professional if unsure about suitability."
+      ]
+}

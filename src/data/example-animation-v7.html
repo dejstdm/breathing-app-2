@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathing Exercise Animation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f3f2ef;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+        }
+
+        .main-container {
+            width: min(90vw, 400px);
+            max-width: 400px;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            background: #2867b2;
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #1a4f8a;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .phase-indicator {
+            background: #2867b2;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .animation-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .outer-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid #f5a623;
+        }
+
+        .inner-ring {
+            /* position: absolute;
+            inset: 2%;
+            border-radius: 50%;
+            border: 3px solid #f5a623; */
+        }
+
+        .progress-ring {
+            position: absolute;
+            inset: -5%;
+            border-radius: 50%;
+            transform: rotate(-90deg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: #f5a623;
+            stroke-width: 5;
+            stroke-linecap: round;
+        }
+
+        .blue-circle {
+            position: absolute;
+            width: 98.5%;
+            height: 98.5%;
+            background: #2867b2;
+            border-radius: 50%;
+            transform: scale(0);
+            transform-origin: center;
+        }
+
+        .breathing-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f5a623;
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: bold;
+            letter-spacing: -0.05em;
+            z-index: 10;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .breathing-text.hidden {
+            opacity: 0;
+        }
+
+        /* Animation classes */
+        .inhale {
+            animation: scaleUp 4s ease-in-out forwards;
+        }
+
+        .exhale {
+            animation: scaleDown 4s ease-in-out forwards;
+        }
+
+        .hold-progress {
+            opacity: 1;
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scaleDown {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                width: 95vw;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            button {
+                padding: 0.75rem 1.25rem;
+                font-size: 1rem;
+            }
+            
+            .phase-indicator {
+                font-size: 1rem;
+                padding: 0.75rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        
+        <div class="phase-indicator" id="phaseIndicator">Ready</div>
+        
+        <div class="animation-container">
+            <div class="outer-ring"></div>
+            
+            <div class="progress-ring" id="progressRing">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="47.5" class="progress-circle" id="progressCircle"></circle>
+                </svg>
+            </div>
+            
+            <div class="inner-ring"></div>
+            
+            <div class="blue-circle" id="blueCircle"></div>
+            
+            <div class="breathing-text" id="breathingText">in</div>
+        </div>
+    </div>
+
+    <script>
+        const phases = {
+            inhale: 4,
+            hold_in: 3,
+            exhale: 4,
+            hold_out: 5
+        };
+
+        let currentPhase = 'inhale';
+        let phaseStartTime = 0;
+        let animationId;
+        let isRunning = false;
+        let isPaused = false;
+
+        const blueCircle = document.getElementById('blueCircle');
+        const progressRing = document.getElementById('progressRing');
+        const progressCircle = document.getElementById('progressCircle');
+        const phaseIndicator = document.getElementById('phaseIndicator');
+        const breathingText = document.getElementById('breathingText');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Calculate circumference for responsive SVG (radius 47.5 in viewBox 100x100)
+        const radius = 47.5;
+        const circumference = 2 * Math.PI * radius;
+        
+        // Set up the progress circle
+        progressCircle.style.strokeDasharray = circumference;
+        progressCircle.style.strokeDashoffset = circumference;
+
+        function updatePhaseIndicator(phase) {
+            const phaseNames = {
+                inhale: 'Breathe In',
+                hold_in: 'Hold',
+                exhale: 'Breathe Out',
+                hold_out: 'Hold'
+            };
+            phaseIndicator.textContent = phaseNames[phase];
+        }
+
+        function updateBreathingText(phase) {
+            if (phase === 'inhale') {
+                breathingText.textContent = 'in';
+                breathingText.classList.remove('hidden');
+            } else if (phase === 'exhale') {
+                breathingText.textContent = 'out';
+                breathingText.classList.remove('hidden');
+            } else if (phase === 'hold_in' || phase === 'hold_out') {
+                breathingText.textContent = 'hold';
+                breathingText.classList.remove('hidden');
+            }
+        }
+
+        function resetStyles() {
+            blueCircle.className = 'blue-circle';
+            blueCircle.style.transform = 'scale(0)';
+            blueCircle.style.animationDuration = '';
+            progressRing.classList.remove('hold-progress');
+            progressCircle.style.strokeDashoffset = circumference;
+            breathingText.textContent = 'in';
+            breathingText.classList.remove('hidden');
+        }
+
+        function animate(timestamp) {
+            if (isPaused) return;
+            
+            if (!phaseStartTime) phaseStartTime = timestamp;
+            
+            const elapsed = (timestamp - phaseStartTime) / 1000;
+            const phaseDuration = phases[currentPhase];
+            const progress = Math.min(elapsed / phaseDuration, 1);
+
+            switch (currentPhase) {
+                case 'inhale':
+                    blueCircle.className = 'blue-circle inhale';
+                    blueCircle.style.animationDuration = phaseDuration + 's';
+                    progressRing.classList.remove('hold-progress');
+                    break;
+
+                case 'hold_in':
+                    blueCircle.className = 'blue-circle';
+                    blueCircle.style.transform = 'scale(1)';
+                    progressRing.classList.add('hold-progress');
+                    
+                    const holdInOffset = circumference - (progress * circumference);
+                    progressCircle.style.strokeDashoffset = holdInOffset;
+                    break;
+
+                case 'exhale':
+                    blueCircle.className = 'blue-circle exhale';
+                    blueCircle.style.animationDuration = phaseDuration + 's';
+                    progressRing.classList.remove('hold-progress');
+                    progressCircle.style.strokeDashoffset = circumference;
+                    break;
+
+                case 'hold_out':
+                    blueCircle.className = 'blue-circle';
+                    blueCircle.style.transform = 'scale(0)';
+                    progressRing.classList.add('hold-progress');
+                    
+                    const holdOutOffset = circumference - (progress * circumference);
+                    progressCircle.style.strokeDashoffset = holdOutOffset;
+                    break;
+            }
+
+            if (progress >= 1) {
+                const phaseOrder = ['inhale', 'hold_in', 'exhale', 'hold_out'];
+                const currentIndex = phaseOrder.indexOf(currentPhase);
+                currentPhase = phaseOrder[(currentIndex + 1) % phaseOrder.length];
+                phaseStartTime = timestamp;
+                updatePhaseIndicator(currentPhase);
+                updateBreathingText(currentPhase);
+                
+                if (currentPhase === 'hold_in' || currentPhase === 'hold_out') {
+                    progressCircle.style.strokeDashoffset = circumference;
+                }
+            }
+
+            if (isRunning && !isPaused) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+
+        function startAnimation() {
+            if (isPaused) {
+                isPaused = false;
+            } else {
+                currentPhase = 'inhale';
+                phaseStartTime = 0;
+                updatePhaseIndicator(currentPhase);
+                updateBreathingText(currentPhase);
+                resetStyles();
+            }
+            
+            isRunning = true;
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            resetBtn.disabled = false;
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function pauseAnimation() {
+            isPaused = true;
+            isRunning = false;
+            cancelAnimationFrame(animationId);
+            
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+
+        function resetAnimation() {
+            isRunning = false;
+            isPaused = false;
+            phaseStartTime = 0;
+            currentPhase = 'inhale';
+            
+            cancelAnimationFrame(animationId);
+            resetStyles();
+            phaseIndicator.textContent = 'Ready';
+            breathingText.textContent = 'in';
+            
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            resetBtn.disabled = true;
+        }
+
+        startBtn.addEventListener('click', startAnimation);
+        pauseBtn.addEventListener('click', pauseAnimation);
+        resetBtn.addEventListener('click', resetAnimation);
+
+        // Initialize
+        pauseBtn.disabled = true;
+        resetBtn.disabled = true;
+    </script>
+</body>
+</html>

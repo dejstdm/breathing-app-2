@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "techniques": [
+    {
+      "id": "box",
+      "name": "Box Breathing",
+      "description": "Balanced inhale, hold, exhale for calm focus.",
+      "explanation": "Box breathing helps regulate the autonomic nervous system by balancing oxygen and CO₂ levels.",
+      "when_to_use": "Use before meetings, presentations, or to reset during stress.",
+      "phases": {
+        "inhale": 4,
+        "hold_in": 4,
+        "exhale": 4,
+        "hold_out": 0
+      },
+      "recommended_cycles": 4,
+      "difficulty": "beginner"
+    }
+  ]
+}

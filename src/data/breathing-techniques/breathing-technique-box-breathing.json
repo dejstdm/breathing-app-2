@@ -1,0 +1,50 @@
+{
+    "id": "box_breathing",
+    "name": "Box Breathing",
+    "estimated_duration_minutes": 5,
+    "description": "Balanced inhale, hold, exhale, hold pattern for calm focus.",
+    "explanation": "Box breathing helps regulate the autonomic nervous system by balancing oxygen and CO₂ levels through equal-duration phases.",
+    "when_to_use": "Before meetings, presentations, or to reset during stress. Great for anxiety management.",
+    "rounds": [
+      {
+        "phases": {
+          "inhale": 4,
+          "hold_in": 4,
+          "exhale": 4,
+          "hold_out": 4
+        },
+        "repetitions": 10,
+        "label": "Box Breathing",
+        "round_messages": [
+          {
+            "type": "info",
+            "text": "Breathe slowly and steadily. Focus on equal timing for each phase.",
+            "trigger": { "type": "repetition", "value": 3 }
+          },
+          {
+            "type": "info",
+            "text": "You're halfway through. Keep the rhythm steady.",
+            "trigger": { "type": "repetition", "value": 5 }
+          }
+        ]
+      }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "beginner",
+    "technique_messages": {
+      "pre_session": [
+        { "type": "info", "text": "Sit comfortably with your back straight." },
+        { "type": "info", "text": "This technique is safe and can be practiced anywhere." }
+      ],
+      "on_start": [
+        { "type": "info", "text": "Begin with a natural breath, then follow the 4-4-4-4 pattern." }
+      ],
+      "on_end": [
+        { "type": "success", "text": "Well done! Notice how calm and centered you feel." }
+      ]
+    },
+    "cautions": [
+      "If you feel dizzy, return to natural breathing.",
+      "Don't strain - the counts should feel comfortable."
+    ]
+  }

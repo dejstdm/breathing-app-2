@@ -1,0 +1,80 @@
+{
+    "id": "coherent_breathing",
+    "name": "Coherent Breathing",
+    "estimated_duration_minutes": 10,
+    "description": "5-second inhale, 5-second exhale for heart rate variability.",
+    "explanation": "Breathing at 6 breaths per minute optimizes heart rate variability and promotes cardiovascular coherence.",
+    "when_to_use": "Daily practice for stress resilience, before meditation, or for general wellbeing.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 5,
+                "hold_in": 0,
+                "exhale": 5,
+                "hold_out": 0
+            },
+            "repetitions": 60,
+            "label": "Coherent Breathing",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Find your natural rhythm. Breathe smoothly without forcing.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 10
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "You're in the flow. Notice the calming effect on your heart rate.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 30
+                    }
+                },
+                {
+                    "type": "success",
+                    "text": "Excellent! You're building cardiovascular resilience.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 50
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "beginner",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "info",
+                "text": "This is a gentle, sustainable breathing pattern."
+            },
+            {
+                "type": "info",
+                "text": "Focus on smooth, even breaths rather than deep ones."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "Begin breathing at a comfortable 5-5 rhythm."
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "Wonderful! Your nervous system is now more balanced."
+            },
+            {
+                "type": "info",
+                "text": "Regular practice enhances stress resilience over time."
+            }
+        ]
+    },
+    "cautions": [
+        "This technique is very gentle and suitable for daily practice.",
+        "Stop if you feel any discomfort and return to natural breathing."
+    ]
+}

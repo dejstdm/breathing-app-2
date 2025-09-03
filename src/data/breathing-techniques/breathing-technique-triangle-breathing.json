@@ -1,0 +1,68 @@
+{
+    "id": "triangle_breathing",
+    "name": "Triangle Breathing",
+    "estimated_duration_minutes": 4,
+    "description": "Three-phase breathing: inhale, hold, exhale (no bottom hold).",
+    "explanation": "Simpler than box breathing, triangle breathing provides gentle nervous system regulation without the complexity of four phases.",
+    "when_to_use": "Quick stress relief, focus enhancement, or as a beginner's alternative to box breathing.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 4,
+                "hold_in": 4,
+                "exhale": 4,
+                "hold_out": 0
+            },
+            "repetitions": 12,
+            "label": "Triangle Breathing",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Three equal sides: inhale, hold, exhale. Simple and effective.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 4
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "You're creating a steady, calming rhythm.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 8
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "beginner",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "info",
+                "text": "This is a gentler version of box breathing."
+            },
+            {
+                "type": "info",
+                "text": "Perfect for beginners or when you need something simple."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "Follow the triangle: inhale, hold, exhale, then repeat."
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "Great work! Notice the sense of calm and focus."
+            }
+        ]
+    },
+    "cautions": [
+        "Very gentle technique with minimal risk.",
+        "If holding feels uncomfortable, reduce the count to 3 seconds."
+    ]
+}

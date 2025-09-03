@@ -1,0 +1,72 @@
+{
+    "id": "extended_exhale",
+    "name": "Extended Exhale Breathing",
+    "estimated_duration_minutes": 6,
+    "description": "Inhale for 4, exhale for 8 to activate relaxation response.",
+    "explanation": "Longer exhales stimulate the vagus nerve and parasympathetic nervous system, promoting deep relaxation and stress relief.",
+    "when_to_use": "Evening wind-down, anxiety relief, or when you need to shift from stress to calm.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 4,
+                "hold_in": 0,
+                "exhale": 8,
+                "hold_out": 0
+            },
+            "repetitions": 15,
+            "label": "Extended Exhale",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Focus on making your exhale smooth and controlled.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 5
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "Feel your body releasing tension with each long exhale.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 10
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "beginner",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "info",
+                "text": "The key is the long, controlled exhale - twice as long as the inhale."
+            },
+            {
+                "type": "info",
+                "text": "This technique is excellent for releasing stress and tension."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "Begin with natural breathing, then shift to the 4-8 pattern."
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "Perfect! You've activated your body's natural relaxation response."
+            },
+            {
+                "type": "info",
+                "text": "This technique is great to use whenever you feel overwhelmed."
+            }
+        ]
+    },
+    "cautions": [
+        "Don't force the exhale - it should be controlled but comfortable.",
+        "If 8 seconds feels too long, start with 4-6 and build up gradually."
+    ]
+}

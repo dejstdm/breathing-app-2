@@ -1,0 +1,73 @@
+{
+    "id": "breathing_478",
+    "name": "4-7-8 Breathing",
+    "estimated_duration_minutes": 3,
+    "description": "Dr. Weil's relaxation technique: inhale 4, hold 7, exhale 8.",
+    "explanation": "The extended exhale activates the parasympathetic nervous system, promoting deep relaxation and better sleep.",
+    "when_to_use": "Before sleep, to reduce anxiety, or when you need to calm down quickly.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 4,
+                "hold_in": 7,
+                "exhale": 8,
+                "hold_out": 0
+            },
+            "repetitions": 4,
+            "label": "4-7-8 Cycle",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "Inhale through your nose, hold, then exhale completely through your mouth.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 1
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "Focus on the long exhale - this is where the magic happens.",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 2
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 2,
+    "difficulty": "intermediate",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "info",
+                "text": "Place the tip of your tongue against the ridge behind your upper teeth."
+            },
+            {
+                "type": "info",
+                "text": "You'll exhale through your mouth around your tongue."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "Start with a complete exhale, then begin the 4-7-8 pattern."
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "Perfect! You should feel noticeably more relaxed."
+            },
+            {
+                "type": "info",
+                "text": "This technique gets more effective with practice."
+            }
+        ]
+    },
+    "cautions": [
+        "Start with 4 cycles maximum - this technique can be very powerful.",
+        "Don't exceed 8 cycles until you're experienced.",
+        "Normal to feel slightly lightheaded at first."
+    ]
+}
