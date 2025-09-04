@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Info, Menu } from "lucide-react";
+import { useHeader } from "@/components/layout/HeaderProvider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody } from "@/components/ui/dialog";
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -13,8 +15,10 @@ type AppShellProps = {
 
 export default function AppShell({ children }: AppShellProps) {
   const [open, setOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
   const pathname = usePathname();
+  const { title, infoItems } = useHeader();
 
   // Close drawer on route change
   useEffect(() => {
@@ -22,6 +26,7 @@ export default function AppShell({ children }: AppShellProps) {
   }, [pathname]);
 
   const isBreath = pathname === "/breath";
+  const headerTitle = isBreath && title ? title : isBreath ? "Breathing" : "Breathing";
 
   return (
     <div className="app-shell min-h-dvh bg-background text-foreground">
@@ -38,8 +43,21 @@ export default function AppShell({ children }: AppShellProps) {
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <div className={`app-shell__title text-base font-medium ${isBreath ? 'text-white' : ''}`}>Breathing</div>
-          <div className="app-shell__header-spacer w-10" aria-hidden />
+          <div className={`app-shell__title text-base font-medium ${isBreath ? 'text-white' : ''}`}>{headerTitle}</div>
+          {isBreath && (infoItems?.length ?? 0) > 0 ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`app-shell__info-button ${isBreath ? 'text-white hover:bg-white/20' : ''}`}
+              aria-label="Technique info"
+              onClick={() => setInfoOpen(true)}
+            >
+              <Info className="h-4 w-4" />
+              <span className="sr-only">Open technique info</span>
+            </Button>
+          ) : (
+            <div className="app-shell__header-spacer w-10" aria-hidden />
+          )}
         </header>
 
         <SheetContent side="left" className="app-shell__drawer w-[82%] max-w-[20rem] p-0">
@@ -55,6 +73,26 @@ export default function AppShell({ children }: AppShellProps) {
       </Sheet>
 
       <main className="app-shell__main pt-14">{children}</main>
+
+      {/* Info dialog for technique cautions */}
+      <Dialog open={infoOpen} onOpenChange={setInfoOpen}>
+        <DialogContent className={isBreath ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80" : undefined}>
+          <DialogHeader>
+            <DialogTitle>Cautions</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            {Array.isArray(infoItems) && infoItems.length > 0 ? (
+              <ul className="list-disc pl-5 space-y-2 text-sm">
+                {infoItems.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">No cautions for this technique.</p>
+            )}
+          </DialogBody>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

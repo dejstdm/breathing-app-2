@@ -24,10 +24,14 @@ function usePrefersReducedMotion() {
 
 interface BreathingAnimationV3Props {
   pattern: BreathingPattern;
+  onStatusChange?: (status: 'running' | 'paused' | 'idle') => void;
+  onRegisterControls?: (api: { start: () => void; pause: () => void; reset: () => void }) => void;
 }
 
 export default function BreathingAnimationV3({
   pattern,
+  onStatusChange,
+  onRegisterControls,
 }: BreathingAnimationV3Props) {
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -188,6 +192,7 @@ export default function BreathingAnimationV3({
     setIsRunning(true);
     isRunningRef.current = true;
     animationIdRef.current = requestAnimationFrame(animate);
+    onStatusChange?.('running');
   };
 
   const pauseAnimation = () => {
@@ -198,6 +203,7 @@ export default function BreathingAnimationV3({
     if (animationIdRef.current) {
       cancelAnimationFrame(animationIdRef.current);
     }
+    onStatusChange?.('paused');
   };
 
   const resetAnimation = () => {
@@ -214,6 +220,7 @@ export default function BreathingAnimationV3({
     resetStyles();
     currentPhaseRef.current = 'inhale';
     setCurrentPhase('inhale');
+    onStatusChange?.('idle');
   };
 
   // Initialize progress circle
@@ -226,6 +233,20 @@ export default function BreathingAnimationV3({
   }, [circumference]);
 
   // Update aria-live text via DOM when phase updates if needed in future
+  
+  // Register external controls once on mount
+  useEffect(() => {
+    if (onRegisterControls) {
+      onRegisterControls({ start: startAnimation, pause: pauseAnimation, reset: resetAnimation });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Emit initial status
+  useEffect(() => {
+    onStatusChange?.('idle');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="breathing-v3 w-full mx-auto flex flex-col items-center gap-4 p-4">
@@ -263,7 +284,7 @@ export default function BreathingAnimationV3({
       </div>
       
       {/* Phase indicator */}
-      <div className="breathing-v3__phase-indicator bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold uppercase">
+      <div className="breathing-v3__phase-indicator bg-primary text-primary-foreground px-4 mb-6 py-2 rounded-full text-sm font-bold uppercase">
         {isRunning || isPaused ? phaseNames[currentPhase] : 'Ready'}
       </div>
       
