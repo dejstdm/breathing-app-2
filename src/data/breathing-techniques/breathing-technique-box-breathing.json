@@ -19,7 +19,7 @@
           {
             "type": "info",
             "text": "Breathe slowly and steadily. Focus on equal timing for each phase.",
-            "trigger": { "type": "repetition", "value": 3 }
+            "trigger": { "type": "repetition", "value": 2 }
           },
           {
             "type": "info",

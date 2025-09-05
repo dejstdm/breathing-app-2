@@ -1,0 +1,50 @@
+{
+  "id": "test-fast",
+  "name": "Test Fast Technique",
+  "estimated_duration_minutes": 1,
+  "description": "A fast technique for debugging UI, messages, and timing.",
+  "explanation": "Short phases so all messages trigger quickly. Use this to test on_start, on_end, and round_messages with repetition and time triggers.",
+  "when_to_use": "Development and QA only.",
+  "rounds": [
+    {
+      "label": "Round A",
+      "phases": { "inhale": 2, "hold_in": 1, "exhale": 2, "hold_out": 3 },
+      "repetitions": 3,
+      "round_messages": [
+        { "type": "info", "text": "Warm up", "trigger": { "type": "time", "value": 2 } },
+        { "type": "success", "text": "Nice start (rep 1)", "trigger": { "type": "repetition", "value": 1 } },
+        { "type": "info", "text": "Halfway (rep 2)", "trigger": { "type": "repetition", "value": 2 } },
+        { "type": "warning", "text": "Focus on form", "trigger": { "type": "time", "value": 5 } }
+      ]
+    },
+    {
+      "label": "Round B",
+      "phases": { "inhale": 2, "hold_in": 1, "exhale": 2, "hold_out": 0 },
+      "repetitions": 2,
+      "round_messages": [
+        { "type": "info", "text": "Round B started", "trigger": { "type": "time", "value": 1 } },
+        { "type": "success", "text": "Great pace", "trigger": { "type": "repetition", "value": 1 } }
+      ]
+    }
+  ],
+  "recommended_cycles": 1,
+  "difficulty": "beginner",
+  "technique_messages": {
+    "pre_session": [
+      { "type": "warning", "text": "Testing mode — keep sessions short." },
+      { "type": "info", "text": "You will see many toasts quickly." }
+    ],
+    "on_start": [
+      { "type": "success", "text": "Session started (test fast)." },
+      { "type": "info", "text": "Phases: 2-1-2-3." }
+    ],
+    "on_end": [
+      { "type": "success", "text": "Session ended. Review toasts above." }
+    ]
+  },
+  "cautions": [
+    "This technique is for debugging only.",
+    "Do not use for real practice."
+  ]
+}
+

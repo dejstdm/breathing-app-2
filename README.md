@@ -58,6 +58,18 @@ bun dev
 
 Open http://localhost:3000 to see the app. It reloads on changes.
 
+### Environment Variables
+
+- Copy `.env.example` to `.env.local` and adjust values for your environment. Next.js automatically loads `.env.local`.
+- Public variables must be prefixed with `NEXT_PUBLIC_` to be exposed to the browser.
+
+Current variables:
+- `NEXT_PUBLIC_DEBUG_BREATH` — `0` or `1` (or `true`). When enabled, shows a debug HUD on `/breath` with live cycle/time/phase/status. Useful during development.
+
+Notes:
+- `.env.local` is gitignored; do not commit secrets.
+- After changing envs, restart the dev server.
+
 ### Testing
 Test commands will be added as features land.
 

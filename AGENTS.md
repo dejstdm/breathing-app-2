@@ -191,6 +191,7 @@ interface BreathingTechnique {
 4. Suggest improvements while maintaining scope
 5. Flag potential issues early in development
 6. Ensure all code is production-ready and tested
+7. Keep environment docs in sync: whenever adding or changing an env var, update both `README.md` (Environment Variables section) and `.env.example` accordingly. Public variables must be prefixed with `NEXT_PUBLIC_`.
 
 ## Current Routing Decisions (as implemented)
 - **Breathing Screen**: Dedicated route at `/breath` for a focused, full-screen animation (header hidden; start/stop overlay controls).

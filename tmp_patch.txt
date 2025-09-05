@@ -1,0 +1,15 @@
+*** Begin Patch
+*** Update File: src/app/breath/page.tsx
+@@
+   // Show on_end when session fully stops (to idle)
+   useEffect(() => {
+     const prev = prevStatusRef.current;
+     if ((prev === 'running' || prev === 'paused') && status === 'idle') {
+       if (onEndMsgs && onEndMsgs.length) queueMessages(onEndMsgs, 'end');
++      setElapsed(0);
++      setRepCount(0);
++      firedRef.current.clear();
+     }
+     prevStatusRef.current = status;
+   }, [status, onEndMsgs]);
+*** End Patch
