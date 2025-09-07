@@ -1,28 +1,41 @@
 "use client";
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BreathingAnimationV3 from "@/components/breathing/BreathingAnimationV3";
 import type { BreathingPattern } from "@/types/breathing";
 import { useHeader } from "@/components/layout/HeaderProvider";
 import BottomBar from "@/components/breathing/BottomBar";
+import { BreathingProvider, useBreathing } from "@/contexts/BreathingContext";
 
 interface TechniqueV2Api {
   id: string;
   name: string;
-  rounds: { phases: BreathingPattern }[];
+  rounds: { 
+    phases: BreathingPattern;
+    round_messages?: Array<{
+      type: 'info' | 'warning' | 'success';
+      text: string;
+      trigger?: { type: 'repetition'; value: number } | { type: 'time'; value: number };
+    }>;
+  }[];
   cautions?: string[];
   technique_messages?: {
     pre_session?: Array<{ type: 'info' | 'warning' | 'success'; text: string }>;
   };
 }
 
-export default function BreathPage() {
+function BreathPageContent() {
   const [pattern, setPattern] = useState<BreathingPattern | null>(null);
+  const [roundMessages, setRoundMessages] = useState<Array<{
+    type: 'info' | 'warning' | 'success';
+    text: string;
+    trigger?: { type: 'repetition'; value: number } | { type: 'time'; value: number };
+  }> | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const { setHeader, resetHeader } = useHeader();
   const [preSession, setPreSession] = useState<Array<{ type: 'info' | 'warning' | 'success'; text: string }> | undefined>(undefined);
-  const controlsRef = useRef<{ start: () => void; pause: () => void; reset: () => void } | null>(null);
-  const [status, setStatus] = useState<'running' | 'paused' | 'idle'>('idle');
+  const { isRunning, play, pause, registerControls, setStatus } = useBreathing();
 
   // Resolve target technique id: query param > localStorage > first available
   useEffect(() => {
@@ -54,6 +67,8 @@ export default function BreathPage() {
           exhale: p.exhale ?? 0,
           hold_out: p.hold_out ?? 0,
         });
+        // Set round messages from first round
+        if (!cancelled) setRoundMessages(data?.rounds?.[0]?.round_messages);
         // Update header with technique name and cautions
         if (!cancelled) setHeader({ title: data.name, infoItems: data.cautions ?? null });
         if (!cancelled) setPreSession(data.technique_messages?.pre_session);
@@ -67,7 +82,7 @@ export default function BreathPage() {
       cancelled = true;
       resetHeader();
     };
-  }, []);
+  }, [setHeader, resetHeader]);
 
   const content = useMemo(() => {
     if (error) return <div className="text-sm text-destructive">{error}</div>;
@@ -75,21 +90,30 @@ export default function BreathPage() {
     return (
       <BreathingAnimationV3
         pattern={pattern}
-        onRegisterControls={(api) => (controlsRef.current = api)}
-        onStatusChange={(s) => setStatus(s)}
+        roundMessages={roundMessages}
+        onRegisterControls={registerControls}
+        onStatusChange={setStatus}
       />
     );
-  }, [pattern, error]);
+  }, [pattern, roundMessages, error, registerControls, setStatus]);
 
   return (
     <div className="breath min-h-dvh w-full relative overflow-hidden touch-pan-y flex items-center justify-center">
       {content}
       <BottomBar
-        isRunning={status === 'running'}
+        isRunning={isRunning}
         preSession={preSession}
-        onPlay={() => controlsRef.current?.start()}
-        onPause={() => controlsRef.current?.pause()}
+        onPlay={play}
+        onPause={pause}
       />
     </div>
+  );
+}
+
+export default function BreathPage() {
+  return (
+    <BreathingProvider>
+      <BreathPageContent />
+    </BreathingProvider>
   );
 }

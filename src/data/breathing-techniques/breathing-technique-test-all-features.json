@@ -1,0 +1,133 @@
+{
+    "id": "test_all_features",
+    "name": "🧪 Test All Features",
+    "estimated_duration_minutes": 1,
+    "description": "Quick test technique with all message types and features for development testing.",
+    "explanation": "This technique uses very short timings to quickly test all round_messages, toast notifications, and feature combinations without long waits.",
+    "when_to_use": "For development testing and feature validation only.",
+    "rounds": [
+        {
+            "phases": {
+                "inhale": 2,
+                "hold_in": 2,
+                "exhale": 2,
+                "hold_out": 1
+            },
+            "repetitions": 8,
+            "label": "Quick Test Cycle",
+            "round_messages": [
+                {
+                    "type": "info",
+                    "text": "🌟 Welcome! This is your first info message (repetition trigger).",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 1
+                    }
+                },
+                {
+                    "type": "warning",
+                    "text": "⏰ 10 seconds in! This is a time-based trigger test.",
+                    "trigger": {
+                        "type": "time",
+                        "value": 10
+                    }
+                },
+                {
+                    "type": "success",
+                    "text": "✅ Great job! You're on your third breath (repetition).",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 3
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "⏱️ 25 seconds elapsed! Time-based message here.",
+                    "trigger": {
+                        "type": "time",
+                        "value": 25
+                    }
+                },
+                {
+                    "type": "warning",
+                    "text": "🔥 Halfway point! Repetition-based trigger (5th breath).",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 5
+                    }
+                },
+                {
+                    "type": "success",
+                    "text": "🎯 40 seconds mark! Another time trigger.",
+                    "trigger": {
+                        "type": "time",
+                        "value": 40
+                    }
+                },
+                {
+                    "type": "info",
+                    "text": "🌟 7th breath! Almost done (repetition trigger).",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 7
+                    }
+                },
+                {
+                    "type": "success",
+                    "text": "🎉 Final breath! You're doing amazing! (8th repetition)",
+                    "trigger": {
+                        "type": "repetition",
+                        "value": 8
+                    }
+                },
+                {
+                    "type": "warning",
+                    "text": "⏰ 55 seconds total! Final time-based message.",
+                    "trigger": {
+                        "type": "time",
+                        "value": 55
+                    }
+                }
+            ]
+        }
+    ],
+    "recommended_cycles": 1,
+    "difficulty": "beginner",
+    "technique_messages": {
+        "pre_session": [
+            {
+                "type": "info",
+                "text": "🧪 This is a test technique with very short timings."
+            },
+            {
+                "type": "warning",
+                "text": "⚡ Each phase is only 1-2 seconds for quick testing."
+            },
+            {
+                "type": "success",
+                "text": "🎯 You'll see toast messages throughout the session."
+            }
+        ],
+        "on_start": [
+            {
+                "type": "info",
+                "text": "🚀 Starting quick test session - watch for toast messages!"
+            }
+        ],
+        "on_end": [
+            {
+                "type": "success",
+                "text": "🎉 Test complete! All message types displayed successfully."
+            },
+            {
+                "type": "info",
+                "text": "✨ Toast notifications are working perfectly!"
+            }
+        ]
+    },
+    "cautions": [
+        "This is a development test technique only.",
+        "Short timings may feel rushed - this is intentional for testing.",
+        "Use regular techniques for actual breathing practice."
+    ]
+}

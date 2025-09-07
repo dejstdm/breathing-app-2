@@ -4,7 +4,17 @@ import ThemeSelector from "./ThemeSelector";
 import ColorSchemeToggle from "./ColorSchemeToggle";
 import TechniqueSelector from "@/components/breathing/TechniqueSelector";
 
+// Conditional imports for audio settings
+const shouldShowAudioSettings = process.env.NEXT_PUBLIC_SHOW_AUDIO_SETTINGS === 'true';
+const AudioSettingsComponent = shouldShowAudioSettings ? 
+  require("@/components/audio/AudioSettings").default : null;
+const useAudioSettings = shouldShowAudioSettings ? 
+  require("@/components/audio/AudioSettings").useAudioSettings : null;
+
 export default function SettingsPage() {
+  const [audioSettings, setAudioSettings] = shouldShowAudioSettings && useAudioSettings ? 
+    useAudioSettings() : [null, null];
+
   return (
     <div className="settings p-4">
       <h1 className="settings__title text-xl font-semibold mb-2">Settings</h1>
@@ -23,12 +33,24 @@ export default function SettingsPage() {
         <ColorSchemeToggle />
       </section>
 
-      <section className="settings__section settings__section--techniques mt-6 mb-20">
+      <section className="settings__section settings__section--techniques mt-6">
         <h2 className="settings__heading text-sm font-medium opacity-80">Breathing Techniques</h2>
         <p className="settings__hint text-xs opacity-60">Pick a technique to start a session.</p>
         <div className="mt-3" />
         <TechniqueSelector />
       </section>
+
+      {process.env.NEXT_PUBLIC_SHOW_AUDIO_SETTINGS === 'true' && (
+        <section className="settings__section settings__section--audio mt-6 mb-20">
+          <h2 className="settings__heading text-sm font-medium opacity-80">Audio Guidance</h2>
+          <p className="settings__hint text-xs opacity-60">Configure breathing cues and voice settings.</p>
+          <div className="mt-3" />
+          <AudioSettingsComponent
+            settings={audioSettings}
+            onSettingsChange={setAudioSettings}
+          />
+        </section>
+      )}
 
       {/* <section className="settings__section settings__section--test mt-6">
         <h2 className="settings__heading text-sm font-medium opacity-80">Theme Test</h2>

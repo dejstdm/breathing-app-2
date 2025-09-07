@@ -1,6 +1,11 @@
+import { PWABanner } from "@/components/pwa/PWAInstall";
+
 export default function Home() {
   return (
     <div className="home p-4">
+      {/* PWA Installation Banner */}
+      <PWABanner />
+      
       <section className="home__section mx-auto max-w-md">
         <h1 className="home__title text-xl font-semibold mb-2">Welcome</h1>
         <p className="home__intro text-sm opacity-80">Use the menu to open Settings and pick a technique. The breathing animation will appear here in the next step.</p>

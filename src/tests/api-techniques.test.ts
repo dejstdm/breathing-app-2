@@ -13,7 +13,7 @@ class SimpleResponse {
 
 jest.mock('next/server', () => ({
   NextResponse: {
-    json: (body: any, init?: any) => new SimpleResponse(body, init) as unknown as Response,
+    json: (body: unknown, init?: ResponseInit) => new SimpleResponse(body, init) as unknown as Response,
   },
 }));
 
@@ -30,7 +30,7 @@ describe('/api/techniques', () => {
   it('returns list of techniques metadata', async () => {
     const res = await getList();
     expect(res.status).toBe(200);
-    const body = (await (res as Response).json()) as any;
+    const body = (await (res as Response).json()) as { items: unknown[] };
     expect(Array.isArray(body.items)).toBe(true);
     expect(body.items).toHaveLength(2);
     expect(body.items[0]).toMatchObject({ id: 'box_breathing', name: 'Box Breathing' });
