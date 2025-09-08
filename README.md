@@ -216,3 +216,4 @@ If you have questions or need help:
 ---
 
 **Note**: This is a PWA designed for modern browsers. For the best experience, use the latest version of Chrome, Firefox, Safari, or Edge.
+

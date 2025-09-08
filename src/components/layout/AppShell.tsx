@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Info, Menu } from "lucide-react";
 import { useHeader } from "@/components/layout/HeaderProvider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody } from "@/components/ui/dialog";
+import PWAInstall, { PWAStatus } from "@/components/pwa/PWAInstall";
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -68,6 +69,14 @@ export default function AppShell({ children }: AppShellProps) {
             <NavLink href="/breath" label="Breathing" onClick={close} active={pathname === "/breath"} />
             <NavLink href="/settings" label="Settings" onClick={close} active={pathname?.startsWith("/settings") ?? false} />
             <NavLink href="/about" label="About" onClick={close} active={pathname?.startsWith("/about") ?? false} />
+            
+            {/* PWA Install in drawer */}
+            <div className="px-4 py-3 border-t border-border mt-auto">
+              <PWAInstall variant="button" showStatus={true} />
+              <div className="mt-2">
+                <PWAStatus />
+              </div>
+            </div>
           </nav>
         </SheetContent>
       </Sheet>

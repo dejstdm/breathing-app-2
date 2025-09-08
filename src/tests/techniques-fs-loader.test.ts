@@ -32,8 +32,8 @@ describe('techniques fs-backed loaders', () => {
         recommended_cycles: 1, difficulty: 'beginner'
       })],
     ]);
-    readFileSpy.mockImplementation((filePath: any) => {
-      const s = map.get(filePath as string);
+    readFileSpy.mockImplementation((filePath: string) => {
+      const s = map.get(filePath);
       if (s == null) throw new Error('ENOENT');
       return s as unknown as Buffer;
     });

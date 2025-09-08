@@ -34,8 +34,7 @@ describe('techniques (directory-based schema)', () => {
     const bad2 = { ...valid, rounds: [{ ...valid.rounds[0], round_messages: [{ type: 'info', text: 'ok', trigger: { type: 'oops', value: 1 } }] }] };
     expect(isTechniqueV2(bad1)).toBe(false);
     // The type assertion bypassed TS; runtime guard should reject
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    expect(isTechniqueV2(bad2 as any)).toBe(false);
+    expect(isTechniqueV2(bad2 as unknown)).toBe(false);
   });
 
   it('derives first-round pattern correctly', () => {
