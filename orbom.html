@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cosmic Breath – Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#02030a;
+    --bg-core:#050a1a;
+    --cyan:#00e7ff;
+    --magenta:#ff2bd6;
+    --indigo:#2d1b69;
+    --text:#d9f8ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:
+      radial-gradient(1200px 1200px at 50% 20%, #0a102c, var(--bg-deep) 60%),
+      radial-gradient(900px 700px at 20% 90%, #07102a, var(--bg-core) 70%);
+    color:var(--text); font-family:Montserrat, system-ui, sans-serif;
+    overflow:hidden;
+  }
+
+  /* Stars / particles layer sits behind all */
+  #tsparticles{position:fixed; inset:0; z-index:0}
+
+  .wrap{position:relative; z-index:1; height:100%; display:grid; place-items:center}
+  .panel{width:min(760px, 92vw); display:grid; gap:24px; justify-items:center}
+
+  .phase{
+    font-family:Orbitron, sans-serif;
+    letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text);
+    text-shadow:0 0 12px rgba(0,231,255,.65), 0 0 22px rgba(255,43,214,.35);
+    filter:drop-shadow(0 0 6px rgba(0,231,255,.3));
+  }
+  .phase h1{margin:0; font-size:clamp(24px,4vw,40px)}
+  .phase .sub{opacity:.6; margin-top:8px; font-size:clamp(12px,2vw,14px)}
+
+  /* ORB */
+  .orb-wrap{position:relative; width:min(56vh, 56vw); aspect-ratio:1; display:grid; place-items:center}
+  .orb{
+    width:100%; height:100%; border-radius:50%;
+    /* Multi-layer nebula gradient (soft) */
+    background:
+      radial-gradient(circle at 35% 30%, rgba(0,231,255,.9), rgba(0,231,255,.0) 45%),
+      radial-gradient(circle at 70% 65%, rgba(255,43,214,.9), rgba(255,43,214,.0) 50%),
+      radial-gradient(circle at 50% 55%, rgba(79,0,255,.9), rgba(79,0,255,.0) 55%),
+      radial-gradient(closest-side at 50% 50%, #0f103a 0%, #040618 92%, transparent 100%);
+    /* Outer glow */
+    box-shadow:
+      0 0 40px 12px rgba(0,231,255,.45),
+      0 0 110px 16px rgba(255,43,214,.25),
+      inset 0 0 60px rgba(0,231,255,.25),
+      inset 0 0 90px rgba(255,43,214,.25);
+    filter: brightness(1) saturate(1.15);
+    transform: scale(1);
+    transition: filter .6s ease, box-shadow .6s ease;
+    position:relative;
+    overflow:hidden;
+    will-change: transform, filter;
+  }
+
+  /* Anti-banding: subtle noise overlay */
+  .orb::after{
+    content:""; position:absolute; inset:-2%;
+    background-image:
+      url('data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="140" height="140" filter="url(%23n)" opacity="0.05"/></svg>');
+    mix-blend-mode: soft-light;
+    pointer-events:none;
+  }
+
+  /* Soft halo ring */
+  .halo{
+    position:absolute; inset:-8%;
+    border-radius:50%;
+    background: radial-gradient(closest-side,
+      rgba(0,231,255,.25) 0%,
+      rgba(255,43,214,.15) 45%,
+      rgba(4,6,24,0) 70%);
+    filter: blur(12px);
+    animation: haloSpin 30s linear infinite;
+  }
+  @keyframes haloSpin { to { transform: rotate(360deg) } }
+
+  /* Phase animations – JS dodaje/menja klase */
+  .orb.inhale   { animation: inhaleAnim var(--d-inhale,4s) ease-in forwards }
+  .orb.exhale   { animation: exhaleAnim var(--d-exhale,4s) ease-out forwards }
+  .orb.holdin,
+  .orb.holdout  { animation: holdAnim var(--d-hold,2s) linear forwards }
+
+  @keyframes inhaleAnim {
+    from { transform: scale(var(--s0,1));   filter: brightness(1); }
+    to   { transform: scale(var(--s1,1.12)); filter: brightness(1.25); }
+  }
+  @keyframes exhaleAnim {
+    from { transform: scale(var(--s1,1.12)); filter: brightness(1.2); }
+    to   { transform: scale(var(--s0,1));   filter: brightness(0.95); }
+  }
+  @keyframes holdAnim {
+    from { transform: translateZ(0) }
+    to   { transform: translateZ(0) }
+  }
+
+  /* Controls */
+  .controls{display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center}
+  .btn{
+    border:none; padding:10px 16px; border-radius:999px; font-weight:600; cursor:pointer;
+    background:#0f1436; color:#dffbff; box-shadow:0 0 0 1px rgba(0,231,255,.2) inset, 0 6px 18px rgba(0,0,0,.35);
+  }
+  .btn.primary{background:linear-gradient(90deg, #00dfff, #ff38cf); color:#081018}
+  .btn:disabled{opacity:.5; cursor:not-allowed}
+
+  .tags{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+  .tag{
+    font-size:12px; padding:6px 10px; border-radius:999px; color:#aeefff;
+    background:rgba(10,20,60,.6); box-shadow:0 0 0 1px rgba(0,231,255,.2) inset;
+    cursor:pointer; user-select:none;
+  }
+  .tag.active{background:linear-gradient(90deg, #091233, #141a49); color:#eaffff; box-shadow:0 0 0 1px rgba(255,43,214,.35) inset}
+
+  /* Footer credit small */
+  .credit{opacity:.45; font-size:12px; margin-top:6px}
+</style>
+</head>
+<body>
+<canvas id="tsparticles"></canvas>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="phase" aria-live="polite" aria-atomic="true">
+      <h1 id="phaseText">Ready</h1>
+      <div class="sub" id="techName">Starlight Focus</div>
+    </div>
+
+    <div class="orb-wrap">
+      <div class="halo"></div>
+      <div id="orb" class="orb"></div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn" class="btn primary">★ START</button>
+      <button id="stopBtn" class="btn">STOP</button>
+    </div>
+
+    <div class="tags" id="tags">
+      <span class="tag active" data-preset="cosmic">Cosmic Breath</span>
+      <span class="tag" data-preset="nebula">Nebula Calm</span>
+      <span class="tag" data-preset="galaxy">Galaxy Hum</span>
+    </div>
+    <div class="credit">Tip: menjaj presete za različite dužine faza</div>
+  </div>
+</div>
+
+<!-- tsparticles CDN (light bundle) – defer so it won't block our inline script -->
+<script defer src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+<script>
+  /* ---------- CONFIG ---------- */
+  const PRESETS = {
+    // inhale, hold-in, exhale, hold-out (sekunde)
+    cosmic: { name: "Cosmic Breath",  times:[4,2,6,2] },
+    nebula: { name: "Nebula Calm",    times:[5,5,5,3] },
+    galaxy: { name: "Galaxy Hum",     times:[7,4,8,4] },
+  };
+  const SCALE_MIN = 1.0, SCALE_MAX = 1.12;
+
+  /* ---------- State ---------- */
+  let currentPreset = PRESETS.cosmic;
+  let running = false, phaseIndex = 0, timer = null;
+
+  const orb = document.getElementById('orb');
+  const phaseText = document.getElementById('phaseText');
+  const techName = document.getElementById('techName');
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn  = document.getElementById('stopBtn');
+
+  // Apply constant CSS vars
+  orb.style.setProperty('--s0', SCALE_MIN);
+  orb.style.setProperty('--s1', SCALE_MAX);
+
+  function setDurations([inh, holdIn, exh, holdOut]){
+    orb.style.setProperty('--d-inhale', inh + 's');
+    orb.style.setProperty('--d-exhale', exh + 's');
+    // Use one var for both holds (visual stillness)
+    const holdAvg = (holdIn + holdOut)/2;
+    orb.style.setProperty('--d-hold', holdAvg + 's');
+  }
+
+  function setPhase(i){
+    const phases = ['INHALE','HOLD','EXHALE','HOLD'];
+    const classes = ['inhale','holdin','exhale','holdout'];
+    phaseText.textContent = phases[i];
+    orb.classList.remove('inhale','holdin','exhale','holdout');
+    orb.classList.add(classes[i]);
+  }
+
+  function nextPhase(){
+    if(!running) return;
+    const [inh, holdIn, exh, holdOut] = currentPreset.times;
+    const durations = [inh, holdIn, exh, holdOut];
+    setPhase(phaseIndex);
+    const ms = durations[phaseIndex]*1000;
+    phaseIndex = (phaseIndex + 1) % 4;
+    timer = setTimeout(nextPhase, ms);
+  }
+
+  function start(){
+    if(running) return;
+    running = true;
+    phaseIndex = 0;
+    setDurations(currentPreset.times);
+    techName.textContent = 'Starlight Focus • ' + currentPreset.name;
+    nextPhase();
+  }
+  function stop(){
+    running = false; clearTimeout(timer);
+    phaseText.textContent = 'Paused';
+    orb.classList.remove('inhale','holdin','exhale','holdout');
+  }
+
+  startBtn.addEventListener('click', start);
+  stopBtn.addEventListener('click', stop);
+
+  // Preset tags
+  document.getElementById('tags').addEventListener('click', (e)=>{
+    const tag = e.target.closest('.tag'); if(!tag) return;
+    document.querySelectorAll('.tag').forEach(t=>t.classList.remove('active'));
+    tag.classList.add('active');
+    const key = tag.dataset.preset;
+    currentPreset = PRESETS[key];
+    setDurations(currentPreset.times);
+    techName.textContent = 'Starlight Focus • ' + currentPreset.name;
+  });
+
+  /* ---------- tsparticles (stars + nebula dust) ---------- */
+  // Defer initialization until window load and only if library is present
+  window.addEventListener('load', async () => {
+    const tp = window.tsParticles;
+    if (!tp || typeof tp.load !== 'function') return; // graceful no-op offline
+    await tp.load("tsparticles", {
+      fpsLimit: 60,
+      detectRetina: true,
+      fullScreen: { enable: true, zIndex: 0 },
+      background: { color: "transparent" },
+      particles: {
+        number: { value: 80, density: { enable: true, area: 1000 } },
+        color: { value: ["#8be9ff","#e074ff","#8a7bff","#c2ffff"] },
+        shape: { type: "circle" },
+        opacity: { value: { min:.2, max:.9 }, animation:{ enable:true, speed:0.3, sync:false } },
+        size: { value: { min:0.5, max:2.2 } },
+        move: { enable: true, speed: 0.2, direction: "none", outModes: { default: "out" } },
+        links: { enable: false },
+      },
+      interactivity: { events: { onHover:{ enable:false }, onClick:{ enable:false } } }
+    });
+  });
+</script>
+</body>
+</html>
